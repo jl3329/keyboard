@@ -13,6 +13,10 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
+  W_LEFT,
+  W_RIGHT,
+  W_CENTR,
+  W_FULL,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, _______, _______, _______, _______,                            _______, _______,  KC_UP,  KC_LBRC, KC_RBRC, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, KC_LEFT, KC_RGHT, KC_UP,   KC_LBRC,                            KC_RBRC, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,
+     _______, W_FULL,  W_LEFT,  W_CENTR, W_RIGHT, KC_LBRC,                            KC_RBRC, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, _______, _______, _______, KC_LCBR, KC_LPRN,          KC_RPRN, KC_RCBR, KC_EQL,  KC_MINS, KC_GRV,  KC_ESC,  _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -92,21 +96,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case RAISE:
+    case W_LEFT:
       if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_LEFT) SS_UP(X_LALT) SS_UP(X_LCTL));
       }
       return false;
       break;
-    case ADJUST:
+    case W_RIGHT:
       if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_RGHT) SS_UP(X_LALT) SS_UP(X_LCTL));
+      }
+      return false;
+      break;
+    case W_CENTR:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) "c" SS_UP(X_LALT) SS_UP(X_LCTL));
+      }
+      return false;
+      break;
+    case W_FULL:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_ENT) SS_UP(X_LALT) SS_UP(X_LCTL));
       }
       return false;
       break;
