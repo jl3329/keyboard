@@ -17,6 +17,8 @@ enum custom_keycodes {
   W_RIGHT,
   W_CENTR,
   W_FULL,
+  TAB_L,
+  TAB_R,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -39,11 +41,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                            KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______,                            _______, _______,  KC_UP,  KC_LBRC, KC_RBRC, _______,
+     _______, _______, _______, _______, _______, _______,                            _______, KC_LPRN, KC_RPRN, KC_BSLS, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, W_FULL,  W_LEFT,  W_CENTR, W_RIGHT, KC_LBRC,                            KC_RBRC, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,
+     _______, W_FULL,  W_LEFT,  W_CENTR, W_RIGHT, _______,                            _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, KC_LCBR, KC_LPRN,          KC_RPRN, KC_RCBR, KC_EQL,  KC_MINS, KC_GRV,  KC_ESC,  _______,
+     _______, _______, TAB_L,   _______, TAB_R,   _______, _______,          _______, _______, KC_LBRC, KC_RBRC, KC_EQL,  KC_MINS, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______,  _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -117,6 +119,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case W_FULL:
       if (record->event.pressed) {
         SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_ENT) SS_UP(X_LALT) SS_UP(X_LCTL));
+      }
+      return false;
+      break;
+    case TAB_R:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_TAB) SS_UP(X_LCTL));
+      }
+      return false;
+      break;
+    case TAB_L:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LSFT) SS_TAP(X_TAB) SS_UP(X_LSFT) SS_UP(X_LCTL));
       }
       return false;
       break;
